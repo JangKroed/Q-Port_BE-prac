@@ -11,15 +11,6 @@ router
   .route('/')
   .post(auth, questionsController.createQna)
   .get(questionsController.getQna);
-
-router
-  .route('/:questionId')
-  .get(questionsController.findByQna)
-  .put(auth, questionsController.updateQna)
-  .delete(auth, questionsController.deleteQna);
-
-router.route('/:questionId/:answerId').put(auth, questionsController.selectQna);
-
 router
   .route('/:questionId/image')
   .put(
@@ -27,5 +18,12 @@ router
     upload.upload.single('postImage'),
     questionsController.updateImage
   );
+router
+  .route('/:questionId')
+  .get(questionsController.findByQna)
+  .put(auth, questionsController.updateQna)
+  .delete(auth, questionsController.deleteQna);
+
+router.route('/:questionId/:answerId').put(auth, questionsController.selectQna);
 
 module.exports = router;

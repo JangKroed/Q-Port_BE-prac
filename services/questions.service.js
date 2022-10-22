@@ -1,4 +1,5 @@
 const QuestionsRepository = require('../repositories/questions.repository');
+require('dotenv').config();
 
 class QuestionsService {
   questionsRepository = new QuestionsRepository();
