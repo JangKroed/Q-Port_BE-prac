@@ -43,6 +43,40 @@ class UsersController {
         .send({ ok: false, message: error.message });
     }
   };
+
+  getUser = async (req, res, next) => {
+    try {
+      // const userData = await this.usersService.getUser(req, res);
+      res.status(200).json({ data: res.locals.user });
+    } catch (error) {
+      res
+        .status(error.status || 400)
+        .send({ ok: false, message: error.message });
+    }
+  };
+
+  updateUser = async (req, res, next) => {
+    try {
+      await this.usersService.updateUser(req, res);
+      res
+        .status(200)
+        .send({ ok: true, message: '회원 정보가 수정되었습니다.' });
+    } catch (error) {
+      res
+        .status(error.status || 400)
+        .send({ ok: false, message: error.message });
+    }
+  };
+
+  updateImage = async (req, res, next) => {
+    try {
+      res.status(200);
+    } catch (error) {
+      res
+        .status(error.status || 400)
+        .send({ ok: false, message: error.message });
+    }
+  };
 }
 
 module.exports = UsersController;

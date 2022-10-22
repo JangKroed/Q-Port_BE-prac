@@ -1,6 +1,7 @@
 const UsersRepository = require('../repositories/users.repository');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 class UsersService {
   usersRepository = new UsersRepository();
@@ -34,6 +35,32 @@ class UsersService {
 
     return token;
   };
+
+  // getUser = async (req, res, next) => {
+  //   const { email } = res.locals.user;
+  //   const nickname = null;
+  //   const userData = await this.usersRepository.findByUser({ email, nickname });
+
+  //   return userData;
+  // };
+
+  updateUser = async (req, res, next) => {
+    const { email, oldPassword, newPassword } = req.body;
+    const nickname = null;
+    const userData = await this.usersRepository.findByUser({ email, nickname });
+
+    const isEqualPw = await bcrypt.compare(oldPassword, userData.password);
+    if (isEqualPw) throw new Error('이전 비밀번호가 동일합니다.');
+
+    const password = await bcrypt.hash(
+      newPassword,
+      Number(process.env.SALT_ROUND)
+    );
+
+    await this.usersRepository.updateUser({ email, password });
+  };
+
+  updateImage = async (req, res, next) => {};
 }
 
 module.exports = UsersService;
