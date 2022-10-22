@@ -71,7 +71,13 @@ class QuestionsService {
     if (findByWriter.userId !== userId)
       throw new Error('본인만 채택할 수 있습니다.');
 
-    await this.questionsRepository.selectQna(questionId, answerId);
+    // await this.questionsRepository.findByAnswerUser(answerId);
+    // const answerUserId = findByAnswerUserId.userId;
+    await this.questionsRepository.selectQna(
+      // answerUserId,
+      questionId,
+      answerId
+    );
   };
 
   updateImage = async (userId, questionId, imageFileName) => {
