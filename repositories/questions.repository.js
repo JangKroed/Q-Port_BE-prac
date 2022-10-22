@@ -1,8 +1,9 @@
-const { Question } = require('../models');
+const { Question, User } = require('../models');
 
 class QuestionsRepository {
   constructor() {
     this.Question = Question;
+    this.User = User;
   }
 
   createQna = async (qna) => {
@@ -45,11 +46,15 @@ class QuestionsRepository {
     });
   };
 
-  selectQna = async (questionId, answerId) => {
+  selectQna = async (/**answerUserId,  */ questionId, answerId) => {
     await this.Question.update(
       { selectedAnswer: answerId },
       { where: { questionId } }
     );
+    // await this.User.increment(
+    //   { score: 1 },
+    //   { where: { userId: answerUserId } }
+    // );
   };
 
   updateImage = async (questionId, imgUrl) => {
