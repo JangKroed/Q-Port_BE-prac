@@ -25,6 +25,15 @@ class UsersRepository {
 
     return userData;
   };
+
+  updateUser = async ({ email, password }) => {
+    await this.User.update(
+      { password, updatedAt: Date.now() },
+      { where: { email } }
+    );
+  };
+
+  updateImage = (req, res, next) => {};
 }
 
 module.exports = UsersRepository;
