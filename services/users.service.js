@@ -15,8 +15,16 @@ class UsersService {
     });
 
     if (existUser) throw new Error('이메일 또는 닉네임이 중복됩니다..');
+    const num = (Math.ceil(Math.random() * 12) + '').padStart(2, '0');
 
-    await this.usersRepository.createUser({ email, nickname, password });
+    await this.usersRepository.createUser({
+      email,
+      nickname,
+      password,
+      avatar: `http://spartacodingclub.shop/static/images/rtans/SpartaIcon${num}.png`,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
   };
 
   login = async (req, res, next) => {
@@ -28,7 +36,7 @@ class UsersService {
     if (!isEqualPw) throw new Error('이메일 또는 패스워드를 확인해주세요');
 
     const token = jwt.sign(
-      { userId: userData.userId, nickname: userData.email },
+      { userId: userData.userId, nickname: userData.nickname },
       process.env.SECRET_KEY,
       { expiresIn: '1d' }
     );
@@ -60,7 +68,16 @@ class UsersService {
     await this.usersRepository.updateUser({ email, password });
   };
 
-  updateImage = async (req, res, next) => {};
+  updateImage = async (userId, imageFileName) => {
+    if (!imageFileName) throw new Error('게시물 이미지가 빈 값');
+
+    const updateImageData = await this.usersRepository.updateImage(
+      userId,
+      process.env.S3_STORAGE_URL + imageFileName
+    );
+
+    return updateImageData;
+  };
 }
 
 module.exports = UsersService;

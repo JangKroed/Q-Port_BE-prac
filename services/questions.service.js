@@ -6,13 +6,14 @@ class QuestionsService {
 
   createQna = async (req, res, next) => {
     const { userId } = res.locals.user;
-    const { title, content, imgUrl } = req.body;
-
+    const { title, content } = req.body;
     const qna = {
       userId,
       title,
       content,
-      imgUrl,
+      imgUrl: `defalt`,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
     };
 
     await this.questionsRepository.createQna(qna);
@@ -42,12 +43,7 @@ class QuestionsService {
       throw new Error('본인만 수정할 수 있습니다.');
     if (!findByWriter) throw new Error('잘못된 요청입니다.');
 
-    await this.questionsRepository.updateQna(
-      questionId,
-      title,
-      content,
-      imgUrl
-    );
+    await this.questionsRepository.updateQna(questionId, title, content);
   };
 
   deleteQna = async (req, res, next) => {
@@ -91,11 +87,9 @@ class QuestionsService {
 
     const updateImageData = await this.questionsRepository.updateImage(
       questionId,
-      imageFileName
+      process.env.S3_STORAGE_URL + imageFileName
     );
-    // require 안했는데 이게 됨 ?
-    updateImageData.imgUrl =
-      process.env.S3_STORAGE_URL + updateImageData.imgUrl;
+
     return updateImageData;
   };
 }

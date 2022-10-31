@@ -6,14 +6,8 @@ class UsersRepository {
     this.User = User;
   }
 
-  createUser = async ({ email, nickname, password }) => {
-    await this.User.create({
-      email,
-      nickname,
-      password,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    });
+  createUser = async (user) => {
+    await this.User.create(user);
   };
 
   findByUser = async ({ email, nickname }) => {
@@ -33,7 +27,17 @@ class UsersRepository {
     );
   };
 
-  updateImage = (req, res, next) => {};
+  updateImage = async (userId, avatar) => {
+    await this.User.update(
+      {
+        avatar,
+      },
+      {
+        where: { userId },
+      }
+    );
+    return await this.User.findByPk(userId);
+  };
 }
 
 module.exports = UsersRepository;
