@@ -70,7 +70,14 @@ class UsersController {
 
   updateImage = async (req, res, next) => {
     try {
-      res.status(200);
+      const { userId } = res.locals.user;
+      const imageFileName = req.file ? req.file.key : null;
+      const imageData = await this.usersService.updateImage(
+        userId,
+        imageFileName
+      );
+
+      res.status(200).json({ image: imageData });
     } catch (error) {
       res
         .status(error.status || 400)

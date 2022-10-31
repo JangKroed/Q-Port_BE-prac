@@ -7,11 +7,7 @@ class QuestionsRepository {
   }
 
   createQna = async (qna) => {
-    await this.Question.create({
-      ...qna,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    });
+    await this.Question.create(qna);
   };
 
   getQna = async () => {
@@ -31,9 +27,9 @@ class QuestionsRepository {
     });
   };
 
-  updateQna = async (questionId, title, content, imgUrl) => {
+  updateQna = async (questionId, title, content) => {
     await this.Question.update(
-      { title, content, imgUrl, updatedAt: Date.now() },
+      { title, content, updatedAt: Date.now() },
       { where: { questionId } }
     );
   };

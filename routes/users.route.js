@@ -19,6 +19,10 @@ router
 
 router
   .route('/users/image')
-//   .put(authLogin, upload.upload.UsersController.updateImage);
+  .put(
+    authLogin,
+    upload.upload.single('postImage'),
+    usersController.updateImage
+  );
 
 module.exports = router;
